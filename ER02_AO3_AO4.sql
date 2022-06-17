@@ -1,0 +1,103 @@
+--DDL
+CREATE DATABASE RPGONLINEBD
+
+USE RPGONLINEBD
+
+CREATE TABLE Usuarios(
+	UsuarioID INT PRIMARY KEY IDENTITY,
+	Email VARCHAR(100) UNIQUE NOT NULL,
+	Senha VARCHAR(255) NOT NULL
+)
+
+CREATE TABLE Classes(
+	ClasseID INT PRIMARY KEY IDENTITY,
+	Nome VARCHAR(50) UNIQUE NOT NULL,
+	Descricao VARCHAR(255)
+)
+
+CREATE TABLE Personagem(
+	PersonagemID INT PRIMARY KEY IDENTITY,
+	NomePersonagem VARCHAR(15) UNIQUE NOT NULL,
+	UsuarioID INT UNIQUE FOREIGN KEY REFERENCES Usuarios(UsuarioID),
+	ClasseID INT FOREIGN KEY REFERENCES Classes(ClasseID)
+)
+
+CREATE TABLE Habilidades(
+	HabilidadeID INT PRIMARY KEY IDENTITY,
+	Nome VARCHAR(100) UNIQUE NOT NULL
+)
+
+CREATE TABLE ClasseHabilidade(
+	ClasseID INT FOREIGN KEY REFERENCES Classes(ClasseID),
+	HabilidadeID INT FOREIGN KEY REFERENCES Habilidades(HabilidadeID)
+)
+
+--DML
+INSERT INTO Usuarios VALUES ('caique@email.com','1234')
+INSERT INTO	Classes VALUES ('Barbaro','Ele é realmente barbaro')
+INSERT INTO Habilidades VALUES ('Lança Mortal'),('Escudo Supremo'), ('Regeneração') 
+INSERT INTO Personagem (NomePersonagem, UsuarioID, ClasseID) VALUES ('Majorbig', 1, 1)
+INSERT INTO ClasseHabilidade (ClasseID, HabilidadeID) VALUES (1,1), (1,2)
+
+INSERT INTO Usuarios VALUES ('jessica@email.com','5678')
+INSERT INTO	Classes VALUES ('Monge','Ele é bruxão mesmo')
+INSERT INTO Personagem (NomePersonagem, UsuarioID, ClasseID) VALUES ('Raiuchu', 2, 2)
+INSERT INTO ClasseHabilidade (ClasseID, HabilidadeID) VALUES (2,1), (2,3)
+
+UPDATE Usuarios
+SET Senha = '12345678'
+WHERE UsuarioID = 1
+
+
+--DQL
+SELECT * FROM Usuarios
+SELECT * FROM Classes
+SELECT * FROM Habilidades
+SELECT * FROM Personagem
+SELECT * FROM ClasseHabilidade
+
+SELECT * FROM Personagem
+INNER JOIN Classes
+ON Personagem.ClasseID = Classes.ClasseID
+
+
+-- Exemplo de JOINS
+CREATE DATABASE EXEMPLOJOINS
+
+USE EXEMPLOJOINS
+
+CREATE TABLE TABELA_A(
+	Nome VARCHAR(50) NULL
+)
+
+CREATE TABLE TABELA_B(
+	Nome VARCHAR(50) NULL
+)
+
+INSERT INTO TABELA_A VALUES ('Fernanda')
+INSERT INTO TABELA_A VALUES ('Josefa')
+INSERT INTO TABELA_A VALUES ('Luiz')
+INSERT INTO TABELA_A VALUES ('Eduardo')
+
+INSERT INTO TABELA_B VALUES ('Carlos'),('Manoel'),('Luiz'),('Fernando')
+
+SELECT TABELA_A.Nome, TABELA_B.Nome FROM TABELA_A
+INNER JOIN TABELA_B
+ON TABELA_A.Nome = TABELA_B.Nome
+
+SELECT TABELA_A.Nome, TABELA_B.Nome FROM TABELA_A
+LEFT JOIN TABELA_B
+ON TABELA_A.Nome = TABELA_B.Nome
+
+SELECT TABELA_A.Nome, TABELA_B.Nome FROM TABELA_A
+RIGHT JOIN TABELA_B
+ON TABELA_A.Nome = TABELA_B.Nome
+
+SELECT TABELA_A.Nome, TABELA_B.Nome FROM TABELA_A
+FULL OUTER JOIN TABELA_B
+ON TABELA_A.Nome = TABELA_B.Nome
+
+SELECT TABELA_A.Nome, TABELA_B.Nome FROM TABELA_A
+LEFT JOIN TABELA_B
+ON TABELA_A.Nome = TABELA_B.Nome
+WHERE TABELA_B.Nome is null
